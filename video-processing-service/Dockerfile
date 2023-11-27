@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy package.json and package-lock.json into the working directory
 COPY package*.json ./
 
-# Install any required packages specified in package.json
+# Install any needed packages specified in package.json
 RUN npm install
 
 # Bundle app source inside the docker image

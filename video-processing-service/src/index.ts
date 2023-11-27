@@ -7,10 +7,11 @@ const app = express();
 app.use(express.json());
 
 app.post("/process-video", async (req, res) => {
+
     // Get the bucket and filename from the Cloud Pub/Sub message.
     let data;
     try {
-        const message = Buffer.from(req.body.messaage.data, 'base64').toString('utf-8');
+        const message = Buffer.from(req.body.message.data, 'base64').toString('utf-8');
         data = JSON.parse(message);
         if (!data.name) {
             throw new Error("Invalid message payload received.");

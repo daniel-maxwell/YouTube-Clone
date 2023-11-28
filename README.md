@@ -5,7 +5,6 @@ It is focused on keeping the design as simple as possible, while still addressin
 
 ## Background
 YouTube is a video sharing platform that allows users to upload, view, rate, share, and comment on videos.
-<br><br>
 
 The scope of YouTube is very large, such that even "trivial" features like rating and commenting on videos are actually quite complex at this scale (1B+ daily active users). For this reason, I'll be focusing mostly on uploading and viewing videos.
 <br><br>

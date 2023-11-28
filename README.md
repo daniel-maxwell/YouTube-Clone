@@ -6,7 +6,7 @@ It is focused on keeping the design as simple as possible, while still addressin
 ## Background
 YouTube is a video sharing platform that allows users to upload, view, rate, share, and comment on videos.
 
-The scope of YouTube is very large, such that even "trivial" features like rating and commenting on videos are actually quite complex at this scale (1B+ daily active users). For this reason, we will be focusing mostly on uploading and viewing videos.
+The scope of YouTube is very large, such that even "trivial" features like rating and commenting on videos are actually quite complex at this scale (1B+ daily active users). For this reason, we I'll be focusing mostly on uploading and viewing videos.
 
 ## Features
 - Users can sign in/out using their Google account.
@@ -25,7 +25,7 @@ Google Cloud Storage is used to host the raw and processed videos. This is a sim
 When a video is uploaded, a message is published to a Cloud Pub/Sub topic. This creates a durability layer for video upload events and processing of videos asynchronously.
 
 ## Video Processing Workers (Cloud Run)
-When a video upload event is published, a video processing worker receives a message from Pub/Sub and transcode the video. Transcoding uses ffmpeg, which is a popular open source tool for video processing, widely used in industry (including at YouTube).
+When a video upload event is published, a video processing worker receives a message from Pub/Sub and transcodes the video. Transcoding uses ffmpeg, which is a popular open source tool for video processing, widely used in industry (including at YouTube).
 
 The nature of video processing can lead to inconsistent workloads, so a Cloud Run is used to scale up and down as needed. Processed videos is uploaded back to Cloud Storage.
 

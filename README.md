@@ -31,7 +31,6 @@ When a video is uploaded, a message is published to a Cloud Pub/Sub topic. This 
 
 ## Video Processing Workers (Cloud Run)
 When a video upload event is published, a video processing worker receives a message from Pub/Sub and transcodes the video. Transcoding uses ffmpeg, which is a popular open source tool for video processing, widely used in industry (including at YouTube).
-<br><br>
 
 The nature of video processing can lead to inconsistent workloads, so a Cloud Run is used to scale up and down as needed. Processed videos is uploaded back to Cloud Storage.
 <br><br>

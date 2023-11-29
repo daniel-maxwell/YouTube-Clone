@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, User } from "firebase/auth";
-
+import { getFunctions } from "firebase/functions";
 
 // The web app's Firebase configuration
 const firebaseConfig = {
@@ -13,8 +13,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
+export const functions = getFunctions(app, 'europe-west2');
 
 /**
  * Signs the user in with a Google popup.
@@ -31,7 +31,6 @@ export function signInWithGoogle() {
 export function signOut() {
     return auth.signOut();
 }
-
 
 /**
  * Trigger a callback when user auth state changes.

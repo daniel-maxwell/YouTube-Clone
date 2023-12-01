@@ -6,23 +6,25 @@ const storage = new Storage();
 
 const rawVideoBucketName = "daniels-yt-raw-videos";
 const processedVideoBucketName = "daniels-yt-processed-videos";
+const thumbnailBucketName = "daniels-yt-thumbnails"
 
 const localRawVideoPath = "./raw-videos";
 const localProcessedVideoPath = "./processed-videos";
+export const thumbnailPath = "./thumbnails"
 
 /**
- * Creates the local directories for raw and processed videos
+ * Creates the local directories for raw and processed videos.
  */
 export function setupDirectories() {
     ensureDirectoryExists(localRawVideoPath);
     ensureDirectoryExists(localProcessedVideoPath);
+    ensureDirectoryExists(thumbnailPath);
 }
-
 
 /**
  * @param rawVideoName - The name of the file to conver from {@link localRawVideoPath}
  * @param processedVideoName - The name of the file to convert to {@link localProcessedVideoPath}
- * @returns A promise that resolves when the video has been converted
+ * @returns A promise that resolves when the video has been converted.
  */
 export function convertVideo(rawVideoName: string, processedVideoName: string) {
     return new Promise<void>((resolve, reject) => {
@@ -40,6 +42,47 @@ export function convertVideo(rawVideoName: string, processedVideoName: string) {
     });
 }
 
+/**
+ * @param videoPath - The path of the video to generate a thumbnail for.
+ * @param thumbnailPath - The path of the thumbnail to generate.
+ * @returns A promise that resolves when the thumbnail has been generated.
+ */
+export function generateThumbnail(videoPath: string, thumbnailPath: string, fileName: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    ffmpeg(videoPath)
+      .on('end', () => resolve(thumbnailPath))
+      .on('error', (err: Error) => reject(err))
+      .screenshots({
+        count: 1,
+        folder: thumbnailPath,
+        size: '320x240',
+        filename: fileName
+      });
+  });
+}
+
+/**
+ * Uploads a thumbnail to Google Cloud Storage and returns its public URL.
+ * @param thumbnailFileName The name of the thumbnail file to upload.
+ * @returns The public URL of the uploaded thumbnail.
+ */
+export async function uploadThumbnail(thumbnailFileName: string): Promise<string> {
+  const bucket = storage.bucket(thumbnailBucketName);
+  const localThumbnailPath = `./thumbnails/${thumbnailFileName}`;
+
+  await bucket.upload(localThumbnailPath, { destination: thumbnailFileName })
+  .then(() => console.log(`Thumbnail uploaded successfully: ${thumbnailFileName}`))
+  .catch(err => console.error(`Error uploading thumbnail ${thumbnailFileName}: ${err}`));
+
+  // Make the file publicly accessible
+  await bucket.file(thumbnailFileName).makePublic();
+
+  // Construct the public URL
+  const publicUrl = `https://storage.googleapis.com/${thumbnailBucketName}/${thumbnailFileName}`;
+  console.log(`Thumbnail uploaded to ${publicUrl}`);
+  
+  return publicUrl;
+}
 
 /**
  * @param fileName - The name of the file to download from the...
@@ -55,7 +98,6 @@ export async function downloadRawVideo(fileName: string) {
         `gs://${rawVideoBucketName}/${fileName} downloaded to ${localRawVideoPath}/${fileName}`
     )
 }
-
 
 /**
  * @param fileName - The name of the file to upload from the...
@@ -76,7 +118,6 @@ export async function uploadProcessedVideo(fileName: string) {
     await bucket.file(fileName).makePublic();
 }
 
-
 /**
  * @param fileName - The name of the file to delete from the...
  *  {@link localRawVideoPath} directory.
@@ -85,7 +126,6 @@ export async function uploadProcessedVideo(fileName: string) {
 export function deleteRawVideo(fileName: string) {
     return deleteFile(`${localRawVideoPath}/${fileName}`);
 }
-
 
 /**
  * @param fileName - The name of the file to delete from the...
@@ -96,15 +136,10 @@ export function deleteProcessedVideo(fileName: string) {
     return deleteFile(`${localProcessedVideoPath}/${fileName}`);
 }
 
-
-
-
-
 /**
  * @param filePath - The path of the file to delete.
  * @returns A promise that resolves when the file has been deleted.
  */
-
 function deleteFile(filePath: string): Promise<void> {
     return new Promise((resolve, reject) => {
         if (fs.existsSync(filePath)) {

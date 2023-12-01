@@ -5,7 +5,6 @@ import * as logger from "firebase-functions/logger";
 import {onCall} from "firebase-functions/v2/https";
 import {Storage} from "@google-cloud/storage";
 
-
 initializeApp();
 
 const firestore = new Firestore();
@@ -19,6 +18,7 @@ export interface Video {
   uid?: string,
   filename?: string,
   status?: "processing" | "processed",
+  thumbnailUrl?: string,
   title?: string,
   description?: string
 }

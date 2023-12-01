@@ -1,0 +1,32 @@
+/* footer.module.css */
+.footer {
+  box-sizing: border-box;
+  position: relative;
+  background-color: #202020; /* Dark background similar to YouTube's theme */
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 14px;
+  vertical-align: bottom;
+  width: 100vw;
+  right: 8px;
+}
+
+.heart {
+  color: red;
+}
+
+.links {
+  margin-top: 10px;
+}
+
+.links a {
+  color: #fff;
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  color: #ff0000; /* Red color on hover for links, similar to YouTube's style */
+}

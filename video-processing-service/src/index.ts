@@ -1,5 +1,14 @@
 import express from "express";
-import { convertVideo, uploadProcessedVideo, deleteProcessedVideo, deleteRawVideo, downloadRawVideo, setupDirectories } from './storage';
+import { 
+  convertVideo,
+  generateThumbnail,
+  uploadThumbnail,
+  thumbnailPath,
+  uploadProcessedVideo,
+  deleteProcessedVideo,
+  deleteRawVideo,
+  downloadRawVideo,
+  setupDirectories } from './storage';
 import { isVideoNew, setVideo } from "./firestore";
 
 setupDirectories();
@@ -8,7 +17,6 @@ const app = express();
 app.use(express.json());
 
 app.post("/process-video", async (req, res) => {
-
     // Get the bucket and filename from the Cloud Pub/Sub message.
     let data;
     try {
@@ -25,6 +33,7 @@ app.post("/process-video", async (req, res) => {
     const inputFileName = data.name; // Has format <UID>-<DATE>.<FILE_EXTENSION>
     const outputFileName = `processed-${inputFileName}`;
     const videoId = inputFileName.split('.')[0];
+    let thumbnailUrl: "" | string = "";
 
     if (!isVideoNew(videoId)) {
       return res.status(400).send("Bad Request: video is already processing or processed");
@@ -39,9 +48,20 @@ app.post("/process-video", async (req, res) => {
     // Download the raw video from Cloud Storage
     await downloadRawVideo(inputFileName);
 
+    try {
+      const thumbnailFileName = `thumbnail-${videoId}.png`;
+      //const thumbnailFilePath = `${thumbnailPath}/${thumbnailFileName}`;
+      await generateThumbnail(`./raw-videos/${inputFileName}`, thumbnailPath, thumbnailFileName);
+      thumbnailUrl = await uploadThumbnail(thumbnailFileName);
+
+    } catch (err) {
+      console.error(`Thumbnail generation or upload failed: ${err}`);
+    }
+
     // Convert the video to 360p
     try {
         await convertVideo(inputFileName, outputFileName);
+
     } catch (err) {
         await Promise.all([deleteRawVideo(inputFileName), deleteProcessedVideo(outputFileName)]);
         console.error(`Video conversion failed: ${err}`);
@@ -53,7 +73,8 @@ app.post("/process-video", async (req, res) => {
 
     setVideo(videoId, {
       status: "processed",
-      filename: outputFileName
+      filename: outputFileName,
+      thumbnailUrl: thumbnailUrl
     });
 
     await Promise.all([deleteRawVideo(inputFileName), deleteProcessedVideo(outputFileName)]);

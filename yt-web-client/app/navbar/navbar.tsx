@@ -25,7 +25,12 @@ export default function Navbar() {
                 <Image src="/youtube-logo.svg" alt="logo" width={90} height={20}/>
             </Link>
             {
-              user && <Upload />
+              user && (
+              <div className={styles.uploadButton}>
+                <Upload />
+                <span className={styles.tooltip}>Upload</span>
+              </div>
+              )
             }
             <SignIn user={user} />
         </nav>

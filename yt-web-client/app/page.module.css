@@ -1,3 +1,11 @@
 .thumbnail {
   margin: 10px;
+  width: 160px;
+  height: 100px;
+  border-radius: 5%;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.thumbnail:hover {
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow effect */
 }

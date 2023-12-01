@@ -3,4 +3,32 @@
     justify-content: space-between;
     align-items: center;
     padding: 1em;
-  }
+}
+
+.uploadButton {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip {
+    visibility: hidden;
+    width: 60px;
+    background-color: white;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-left: -30px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    /*box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);*/
+}
+
+.uploadButton:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}

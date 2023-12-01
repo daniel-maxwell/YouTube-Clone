@@ -18,7 +18,7 @@ export default function SignIn({ user }: SignInProps) {
                     </button>
                 ) : (
                     <button className={styles.signin} onClick={signInWithGoogle}>
-                        Sign In
+                        Sign In to Upload Videos
                     </button>
                 )
             }

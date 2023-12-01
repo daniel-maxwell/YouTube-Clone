@@ -9,6 +9,7 @@ export interface Video {
   uid?: string,
   filename?: string,
   status?: "processing" | "processed",
+  thumbnailUrl?: string,
   title?: string,
   description?: string
 }

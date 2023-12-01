@@ -1,0 +1,9 @@
+html, body {
+  height: 100%; /* Full height */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+}
+
+body {
+  flex: 1; /* Allows the body to expand to fill available space */
+}

@@ -1,0 +1,56 @@
+
+
+/* General container styling */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  vertical-align: middle;
+}
+
+/* Header styling */
+.header {
+  margin: 20px;
+  margin-bottom: 40px;
+}
+
+/* Video player styling */
+.video {
+  margin-top: 20px;
+  margin-bottom: 80px;
+  width: 80%; /* Responsive width */
+  max-width: 800px; /* Max width to ensure it's not too large on bigger screens */
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.backButton {
+  display: inline-block;
+  text-decoration: none; /* Remove underline from link */
+  font-size: 20px; /* Adjust the size of the arrow */
+  color: #000000; /* Stylish blue color for the arrow */
+  position: absolute; /* Fixed positioning relative to the viewport */
+  bottom: 10vh;
+  left: 20px; /* Adjust as needed */
+  transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+.backButton:hover {
+  color: #a1a1a1; /* Darker shade on hover */
+}
+
+.backButton::before {
+  content: '←'; /* Unicode character for left arrow */
+  padding-right: 8px; /* Spacing between arrow and text */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  .video {
+    width: 95%; /* Larger width for smaller screens */
+  }
+}

@@ -18,7 +18,7 @@ The scope of YouTube is very large, such that even "trivial" features like ratin
 <br><br>
 
 ## Architecture Overview
-![image](https://github.com/daniel-maxwell/YouTube-Clone/assets/66431847/9f018ef7-3790-4b02-babd-64b5c891ebc0)
+![YouTube Clone Architecture](https://github.com/daniel-maxwell/YouTube-Clone/assets/66431847/299d6fa2-8ad7-42e2-bb09-1c7a33610f7f)
 <br><br>
 
 ## Video Storage (Cloud Storage)
@@ -49,8 +49,28 @@ Next.js is used to build a simple web client that will allow users to sign in an
 
 ## Authentication (Firebase Auth)
 Firebase Auth is used to handle user authentication. This allows easy integration with Google Sign In.
-<br><br><br>
+<br><br>
 
+## Limitations
+- **Long Lived HTTP Requests:** Videos that take > 600 seconds to process will cause issues (because I used simple Push-based subscriptions rather than Pull-based).
+- **Video Processing Failure:** If a message is pulled from the Pub/Sub queue, the status of it in Firestore is changed to "processing", and then our video processing service fails, the message will be stuck in the Pub/Sub queue forever.
+- **Video Streaming:** GCS provides very barebones video streaming capabilities. YouTube actually uses DASH (Dynamic Adaptive Streaming over HTTP) to stream videos, meanwhile Netflix uses HLS (HTTP Live Streaming).
+- **No Content Delivery Network:** Ideally, we would want to serve our videos from a CDN (Content Delivery Network). This would allow the serving of videos from a server that is geographically close to the user, reducing latency and improving the user experience.
+- **Illegal Videos:** There is no way of checking if a video is illegal before serving it to users. This is a big problem. For this reason, it may be unsafe to deploy this app publically.
+<br><br>
+
+## Future Work
+Below is a non-exhaustive list of future work that can be done to improve the app.
+
+ - (Bug fix) Allow users to upload multiple videos without refreshing the page.
+ - Allow users to upload thumbnails for their videos, instead of automatically generating thumbnails.
+ - Allow user's to add a title and description to their videos.
+ - Show the uploader of a video.
+ - Allow user's to subscribe to other user's channels.
+ - Clean up raw videos in Cloud Storage after processing.
+ - Use a CDN to serve videos.
+ - Add unit and integration tests (!!).
+<br><br><br>
 
 Author
 ======

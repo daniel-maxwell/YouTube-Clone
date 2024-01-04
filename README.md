@@ -1,6 +1,8 @@
 # Welcome to my YouTube Clone
 This project is a simplified YouTube clone, where the core functionality of the website is implemented.
 It is focused on keeping the design as simple as possible, while still addressing some scalability tradeoffs.
+<br>
+Check out the deployed project here: https://yt-web-client-2h6zbgguwa-nw.a.run.app/
 <br><br>
 
 ## Background
